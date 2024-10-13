@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 //Base user schema
-
 const userSchema = new mongoose.Schema({
   name: { type: String },
   role: {
@@ -13,7 +12,7 @@ const userSchema = new mongoose.Schema({
 });
 
 //customer schema
-const customerSchema = new mongoose({
+const customerSchema = new mongoose.Schema({
   ...userSchema.obj,
   phone: { type: Number, required: true, unique: true },
   role: {
@@ -29,7 +28,7 @@ const customerSchema = new mongoose({
 });
 
 //delivery partner schema
-const DeliveryPartnerSchema = new mongoose({
+const DeliveryPartnerSchema = new mongoose.Schema({
   ...userSchema.obj,
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -51,7 +50,7 @@ const DeliveryPartnerSchema = new mongoose({
 });
 
 //Admin schema..
-const AdminSchema = new mongoose({
+const AdminSchema = new mongoose.Schema({
   ...userSchema.obj,
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
