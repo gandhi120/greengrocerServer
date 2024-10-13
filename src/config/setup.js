@@ -29,15 +29,11 @@ export const admin = new AdminJS({
         filterProperties: ["email", "role"],
       },
     },
-    {
-      resource: Models.Branch,
-    },
-    {
-      resource: Models.Category,
-    },
-    {
-      resource: Models.Product,
-    },
+    { resource: Models.Branch },
+    { resource: Models.Category },
+    { resource: Models.Product },
+    { resource: Models.Order },
+    { resource: Models.Counter },
   ],
   branding: {
     companyName: "greengrocery",
