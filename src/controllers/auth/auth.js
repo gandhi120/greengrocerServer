@@ -40,12 +40,17 @@ export const loginCustomer = async (req, reply) => {
 export const loginDeliveryPartner = async (req, reply) => {
   try {
     const { email, password } = req.body;
+    console.log("email", email);
+    console.log("password", password);
+
     const deliveryPartner = await DeliveryPartner.findOne({ email });
+    console.log("deliveryPartner", deliveryPartner);
 
     if (!deliveryPartner) {
       return reply.status(404).send({ message: "Delivery Partner not found" });
     }
     const isMatch = password === deliveryPartner.password;
+    console.log("isMatch", isMatch);
 
     if (!isMatch) {
       return reply.status(400).send({ message: "Invalid credential" });

@@ -15,6 +15,8 @@ sessionStore.on("error", (error) => {
 export const authenticate = async (email, password) => {
   if (email && password) {
     const user = await Admin.findOne({ email });
+    console.log("user", user);
+
     if (!user) {
       return null;
     }

@@ -3,15 +3,22 @@ import Branch from "../../models/branch.js";
 import { Customer, DeliveryPartner } from "../../models/user.js";
 
 export const createOrder = async (req, reply) => {
+  console.log("createOrder", req.user);
+
   try {
     const { userId } = req.user;
     const { items, branch, totalPrice } = req.body;
 
     const customerData = await Customer.findById(userId);
+    console.log("customerData", customerData);
+
     const branchData = await Branch.findById(branch);
+    console.log("branchData", branchData);
+
     if (!customerData) {
       return reply.status(404).send({ message: "Customer not found" });
     }
+
     const newOrder = new Order({
       customer: userId,
       items: items.map((item) => ({
@@ -27,14 +34,25 @@ export const createOrder = async (req, reply) => {
         address: customerData.address || "No address available",
       },
       pickupLocation: {
-        latitude: branchData.location.latitude,
-        longitude: branchData.location.longitude,
+        latitude: branchData.liveLocation.latitude,
+        longitude: branchData.liveLocation.longitude,
+        address: branchData.address || "No address available",
+      },
+      deliveryPersonLocation: {
+        latitude: null,
+        longitude: null,
         address: branchData.address || "No address available",
       },
     });
+    console.log("newOrder", newOrder);
+
     const savedOrder = await newOrder.save();
+    console.log("savedOrder", savedOrder);
+
     return reply.status(201).send(savedOrder);
   } catch (error) {
+    console.log("error", error);
+
     return reply.status(500).send({ message: "Failed to create order", error });
   }
 };
@@ -61,7 +79,10 @@ export const confirmOrder = async (req, reply) => {
       longitude: deliveryPersonLocation?.longitude,
       address: deliveryPersonLocation?.address || "",
     };
+    console.log("order", order);
     req.server.io.to(orderId).emit("OrderConfirmed", order);
+    console.log("order1");
+
     await order.save();
     return reply.send(order);
   } catch (error) {
@@ -106,6 +127,8 @@ export const updateOrderStatus = async (req, reply) => {
 };
 
 export const getOrders = async (req, reply) => {
+  console.log("getOrders");
+
   try {
     const { status, customerId, deliveryPartnerId, branchId } = req.query;
     let query = {};
